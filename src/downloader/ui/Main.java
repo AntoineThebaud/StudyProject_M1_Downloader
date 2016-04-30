@@ -21,21 +21,21 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		JFrame Jeff = new JFrame();
-		Jeff.setMinimumSize(new Dimension(400, 400));
-		Jeff.setLocationRelativeTo(null);
+		JFrame myFrame = new JFrame();
+		myFrame.setMinimumSize(new Dimension(400, 400));
+		myFrame.setLocationRelativeTo(null);
 		
 		//partie HAUTE : barres de téléchargement
-		JPanel JP_dl = new JPanel();
-		JP_dl.setLayout(new StackLayout());
+		JPanel jpDL = new JPanel();
+		jpDL.setLayout(new StackLayout());
 		
-		//partie BASSE : texfield + bouton add
-		JPanel JP_bottom = new JPanel();
+		//partie BASSE : textfield + bouton add
+		JPanel jpBottom = new JPanel();
 
-		JP_bottom.setLayout(new BorderLayout());
+		jpBottom.setLayout(new BorderLayout());
 		
-		Jeff.add(JP_dl, BorderLayout.NORTH);
-		Jeff.add(JP_bottom, BorderLayout.SOUTH);
+		myFrame.add(jpDL, BorderLayout.NORTH);
+		myFrame.add(jpBottom, BorderLayout.SOUTH);
 		
 		String[] uris = {
 			"http://iihm.imag.fr/blanch/M1/TLI/tps/3-notification/index.html",
@@ -45,30 +45,30 @@ public class Main {
 		};
 		
 		for(String uri : uris) {
-			launchDL(uri, JP_dl);
+			launchAndDisplayDL(uri, jpDL);
 		}
 		
 		//zone de saisie
-		JTextField textphild = new JTextField();
-		textphild.setPreferredSize(new Dimension(120, 20));
-		JP_bottom.add(textphild, BorderLayout.CENTER);
+		JTextField textInput = new JTextField();
+		textInput.setPreferredSize(new Dimension(120, 20));
+		jpBottom.add(textInput, BorderLayout.CENTER);
 		//bouton confirmation
-		JButton bt_add = new JButton("add");
-		JP_bottom.add(bt_add, BorderLayout.EAST);
+		JButton btAdd = new JButton("add");
+		jpBottom.add(btAdd, BorderLayout.EAST);
 		
-		bt_add.addActionListener(new ActionListener() {
+		btAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				launchDL(textphild.getText(), JP_dl);
-				Jeff.pack();
+				launchAndDisplayDL(textInput.getText(), jpDL);
+				myFrame.pack();
 			}
 	    });
 		
-		Jeff.setVisible(true);
-		Jeff.pack();
+		myFrame.setVisible(true);
+		myFrame.pack();
 	}	
 	
-	public static void launchDL(String url, JPanel JP) {
+	public static void launchAndDisplayDL(String url, JPanel jp) {
 		Downloader d = new Downloader(url);
 		Thread t = new Thread(new Runnable() { 
 			public void run() { 
@@ -87,7 +87,7 @@ public class Main {
 	    dlText.setHorizontalAlignment(JTextField.LEFT);
 	    dlText.setEditable(false);
 	    
-	    JP.add(dlText);
+	    jp.add(dlText);
 	    
 	    //progress bar + boutons :
 	    JPanel displayPart = new JPanel();
@@ -117,10 +117,10 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				t.interrupt();
-				JP.remove(dlText);
-				JP.remove(displayPart);
-				JP.revalidate(); 
-				JP.repaint();
+				jp.remove(dlText);
+				jp.remove(displayPart);
+				jp.revalidate(); 
+				jp.repaint();
 			}
 	    });
 		
@@ -128,7 +128,7 @@ public class Main {
 		displayPart.add(btRun);
 		displayPart.add(btDelete);
 
-	    JP.add(displayPart);
+	    jp.add(displayPart);
 		
 		d.addPropertyChangeListener(new PropertyChangeListener() {		
 			public void propertyChange(PropertyChangeEvent evt) {
